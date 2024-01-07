@@ -47,7 +47,21 @@ public class Server {
         System.out.println("Отключился клиент " + clientHandler.getUsername());
     }
 
-    public synchronized void sendPrivateMessage(ClientHandler sender, String receiverUsername, String message) {
-        // TODO homework
+    public synchronized void sendPrivateMessage(ClientHandler sender, String recipientUsername, String message) {
+        for (ClientHandler client : clients) {
+            if (client.getUsername().equals(recipientUsername)) {
+                client.sendMessage("Личное сообщение от " + sender.getUsername() + ": " + message);
+                sender.sendMessage("Личное сообщение для " + recipientUsername + ": " + message);
+                return;
+            }
+        }
+    }
+    public synchronized boolean isUsernameExists(String username) {
+        for (ClientHandler client : clients) {
+            if (client.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
